@@ -23,13 +23,17 @@ class User extends Authenticatable implements JWTSubject
     protected $fillable = [
         'name',
         'email',
-        'provider',
-        'provider_id',
         'password',
+        'phone',
+        'country',
+        'city',
+        'state',
+        'address',
+        'imam_name',
+        'documents',
+        'contact_person_phone',
         'role',
         'email_verified_at',
-        'selected_pet',
-        'stripe_id',
     ];
 
     /**
@@ -55,10 +59,7 @@ class User extends Authenticatable implements JWTSubject
         ];
     }
 
-    public function pets()
-    {
-        return $this->hasMany(Pet::class);
-    }
+
 
     public function getJWTIdentifier()
     {
@@ -70,8 +71,14 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
 
+
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
+    }
+
     // Method to handle subscription update
-    public function updateStripeSubscription($invoice)
+    /*public function updateStripeSubscription($invoice)
     {
         $plan = Plan::where('stripe_price_id', $invoice->lines->data[0]->price['id'])->first();
 
@@ -95,5 +102,5 @@ class User extends Authenticatable implements JWTSubject
             Log::error($e->getMessage());
         }
 
-    }
+    }*/
 }

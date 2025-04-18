@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class AdminMiddleware
+class SuperAdminMiddleware
 {
     use ResponseTrait;
     /**
@@ -18,14 +18,12 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-
         if (!Auth::check()) {
-            return $this->sendError('Please login first', [], 401);
+            return redirect()->route('login');
         }
-        if (Auth::user()->role === 'admin') {
+        if (Auth::user()->role === 'super_admin') {
             return $next($request);
         }
         return $this->sendError("You don't have access to this route.", [], 401);
-
     }
 }

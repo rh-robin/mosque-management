@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Traits\ResponseTrait;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -9,6 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class UserMiddleware
 {
+    use ResponseTrait;
     /**
      * Handle an incoming request.
      *
@@ -17,12 +19,11 @@ class UserMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         if (!Auth::check()) {
-            return redirect()->route('login');
+            return $this->sendError('Please login first', [], 401);
         }
-        if (Auth::user()->role === 'admin') {
-            return redirect()->route('admin.dashboard');
-        }else if(Auth::user()->role === 'user'){
+        if (Auth::user()->role === 'user') {
             return $next($request);
         }
+        return $this->sendError("You don't have access to this route.", [], 401);
     }
 }

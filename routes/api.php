@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\BreedsApiController;
 use App\Http\Controllers\API\FoodApiController;
 use App\Http\Controllers\API\PetApiController;
+use App\Http\Controllers\API\PostApiController;
 use App\Http\Controllers\API\SocialLoginController;
 use App\Http\Controllers\API\SubscriptionController;
 use App\Http\Controllers\API\TipsCareApiController;
@@ -10,45 +12,54 @@ use App\Http\Controllers\API\WeightApiController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use Illuminate\Support\Facades\Route;
 
-Route::post('/socialLogin', [SocialLoginController::class, 'SocialLogin']);
-
-Route::get('register', [RegisteredUserController::class, 'create'])
-        ->name('register');
-
-    Route::post('register', [RegisteredUserController::class, 'store']);
-
-Route::middleware('auth:api')->group(function () {
-    Route::post('/logout', [SocialLoginController::class, 'logout']);
-    Route::get('/profile', [SocialLoginController::class, 'getProfile']);
-
-    /* ==========  pet api ==========*/
-    Route::post('/pet/store', [PetApiController::class, 'store']);
-    Route::post('/pet/update/{id}', [PetApiController::class, 'update']);
-    Route::get('/my-pet', [PetApiController::class, 'myPet']);
-    Route::post('/select-pet', [PetApiController::class, 'selectPet']);
-    Route::get('/selected-pet', [PetApiController::class, 'selectedPet']);
+//Route::post('/socialLogin', [SocialLoginController::class, 'SocialLogin']);
+/*==================== ALL COMMON ROUTES =================*/
+Route::middleware(['api.guest'])->group(function () {
+    Route::post('user/register', [RegisteredUserController::class, 'userStore']);
+    Route::post('admin/register', [RegisteredUserController::class, 'adminStore']);
+    Route::post('login', [AuthController::class, 'login']);
 });
 
-/*================= food api ==================*/
-Route::post('/analyze-food', [FoodApiController::class, 'analyzeFood']);
-Route::post('/food-info/date', [FoodApiController::class, 'getFoodInfoByDate']);
-Route::post('/analyze-food/claude', [FoodApiController::class, 'analyzeFoodClaude']);
-
-/* ====================== WEIGHT API =====================*/
-Route::post('/weight/store', [WeightApiController::class, 'storeWeight']);
-Route::get('/pet-weight/this-week/{pet_id}', [WeightApiController::class, 'petWeightThisWeek']);
-Route::get('/pet-weight/this-month/{pet_id}', [WeightApiController::class, 'petWeightThisMonth']);
-Route::get('/pet-weight/six-month/{pet_id}', [WeightApiController::class, 'petWeightSixMonth']);
-
-//food weight =====
-Route::get('/food-weight/today/{pet_id}', [WeightApiController::class, 'foodWeightToday']);
-Route::get('/food-weight/this-week/{pet_id}', [WeightApiController::class, 'foodWeightThisWeek']);
-Route::get('/food-weight/five-months/{pet_id}', [WeightApiController::class, 'foodWeightFiveMonths']);
+Route::middleware('auth:api')->group(function () {
+    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::post('/me', [AuthController::class, 'logout']);
+});
 
 
 
-/* ====================== TIPS CARE api ===================*/
-Route::get('/tips-and-care', [TipsCareApiController::class, 'index']);
+/*==================== ALL ROUTES FOR USER =================*/
+Route::post('user/register', [RegisteredUserController::class, 'userStore']);
+
+
+
+
+
+
+
+/*==================== ALL ROUTES FOR ADMIN =================*/
+
+Route::middleware(['auth:api', 'admin'])
+    ->prefix('admin')
+    ->group(function () {
+    //====== Post API routes
+    Route::prefix('post')
+        ->controller(PostApiController::class)
+        ->group(function () {
+        Route::post('/store', 'store');
+        Route::post('/update', 'update');
+        Route::post('/destroy/id', 'destroy');
+    });
+});
+
+
+
+
+
+
+
+
+
+
 
 
 /* ====================== BREED API ===================*/

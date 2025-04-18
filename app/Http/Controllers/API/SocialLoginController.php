@@ -13,7 +13,7 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 class SocialLoginController extends Controller
 {
     use ResponseTrait;
-    public function SocialLogin(Request $request): JsonResponse
+    /*public function SocialLogin(Request $request)
     {
         $request->validate([
             'token'    => 'required',
@@ -70,9 +70,9 @@ class SocialLoginController extends Controller
         } catch (\Exception $e) {
             return $this->sendError($e->getMessage(), [], 401);
         }
-    }
+    }*/
 
-    public function logout()
+    /*public function logout()
     {
         try {
             // Invalidate the token
@@ -81,11 +81,11 @@ class SocialLoginController extends Controller
         } catch (\Exception $e) {
             return $this->sendError('Failed to log out, please try again.' . $e->getMessage(), [], 400);
         }
-    }
+    }*/
 
-    public function getProfile()
+    /*public function getProfile()
     {
         $user = Auth::user();
         return $this->sendResponse($user, 'User profile', '', 200);
-    }
+    }*/
 }

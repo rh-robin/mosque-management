@@ -16,7 +16,9 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
             'admin' => 'App\Http\Middleware\AdminMiddleware',
+            'super_admin' => 'App\Http\Middleware\SuperAdminMiddleware',
             'user'  => 'App\Http\Middleware\UserMiddleware',
+            'api.guest' => 'App\Http\Middleware\ApiGuestMiddleware',
         ]);
         $middleware->validateCsrfTokens(except: [
             'stripe/webhook', // <-- exclude this route
