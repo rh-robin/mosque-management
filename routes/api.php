@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\API\AdvertisementApiController;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\BreedsApiController;
+use App\Http\Controllers\API\EventApiController;
 use App\Http\Controllers\API\FoodApiController;
 use App\Http\Controllers\API\PetApiController;
 use App\Http\Controllers\API\PostApiController;
@@ -41,14 +43,34 @@ Route::post('user/register', [RegisteredUserController::class, 'userStore']);
 Route::middleware(['auth:api', 'admin'])
     ->prefix('admin')
     ->group(function () {
+
     //====== Post API routes
     Route::prefix('post')
         ->controller(PostApiController::class)
         ->group(function () {
         Route::post('/store', 'store');
         Route::post('/update', 'update');
-        Route::post('/destroy/id', 'destroy');
+        Route::post('/destroy', 'destroy');
     });
+
+    //====== Event API routes
+    Route::prefix('event')
+        ->controller(EventApiController::class)
+        ->group(function () {
+            Route::post('/store', 'store');
+            Route::post('/update', 'update');
+            Route::post('/destroy', 'destroy');
+        });
+
+
+        //====== Event API routes
+        Route::prefix('advertisement')
+            ->controller(AdvertisementApiController::class)
+            ->group(function () {
+                Route::post('/store', 'store');
+                Route::post('/update', 'update');
+                Route::post('/destroy', 'destroy');
+            });
 });
 
 
