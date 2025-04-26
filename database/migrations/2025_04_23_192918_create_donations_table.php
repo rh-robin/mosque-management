@@ -13,6 +13,14 @@ return new class extends Migration
     {
         Schema::create('donations', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('user_id');
+            $table->string('cause');
+            $table->text('description')->nullable();
+            $table->string('image')->nullable();
+            $table->enum('has_limit', ['yes', 'no']);
+            $table->float('raised_amont')->nullable();
+            $table->float('amount_limit')->nullable();
+            $table->boolean('status ');
             $table->timestamps();
         });
     }
