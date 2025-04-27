@@ -18,9 +18,9 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->string('image')->nullable();
             $table->enum('has_limit', ['yes', 'no']);
-            $table->float('raised_amont')->nullable();
+            $table->float('raised_amount')->nullable();
             $table->float('amount_limit')->nullable();
-            $table->boolean('status ');
+            $table->boolean('status');
             $table->timestamps();
         });
     }
