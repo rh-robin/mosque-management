@@ -3,6 +3,7 @@
 use App\Http\Controllers\API\AdvertisementApiController;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\BreedsApiController;
+use App\Http\Controllers\API\DonationApiController;
 use App\Http\Controllers\API\EventApiController;
 use App\Http\Controllers\API\FoodApiController;
 use App\Http\Controllers\API\PetApiController;
@@ -16,11 +17,14 @@ use Illuminate\Support\Facades\Route;
 
 //Route::post('/socialLogin', [SocialLoginController::class, 'SocialLogin']);
 /*==================== ALL COMMON ROUTES =================*/
-Route::middleware(['api.guest'])->group(function () {
+/*Route::middleware(['api.guest'])->group(function () {
     Route::post('user/register', [RegisteredUserController::class, 'userStore']);
     Route::post('admin/register', [RegisteredUserController::class, 'adminStore']);
     Route::post('login', [AuthController::class, 'login']);
-});
+});*/
+Route::post('user/register', [RegisteredUserController::class, 'userStore']);
+Route::post('admin/register', [RegisteredUserController::class, 'adminStore']);
+Route::post('login', [AuthController::class, 'login']);
 
 Route::middleware('auth:api')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
@@ -63,9 +67,19 @@ Route::middleware(['auth:api', 'admin'])
         });
 
 
-        //====== Event API routes
+        //====== Advertisement API routes
         Route::prefix('advertisement')
             ->controller(AdvertisementApiController::class)
+            ->group(function () {
+                Route::post('/store', 'store');
+                Route::post('/update', 'update');
+                Route::post('/destroy', 'destroy');
+            });
+
+
+        //====== Advertisement API routes
+        Route::prefix('donation')
+            ->controller(DonationApiController::class)
             ->group(function () {
                 Route::post('/store', 'store');
                 Route::post('/update', 'update');

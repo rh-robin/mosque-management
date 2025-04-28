@@ -20,7 +20,7 @@ return new class extends Migration
             $table->enum('has_limit', ['yes', 'no']);
             $table->float('raised_amount')->nullable();
             $table->float('amount_limit')->nullable();
-            $table->boolean('status');
+            $table->boolean('status')->default(true);
             $table->timestamps();
         });
     }

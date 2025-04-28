@@ -13,7 +13,7 @@ class Donation extends Model
         'cause',
         'description',
         'image',
-        'raised_amont',
+        'raised_amount',
         'amount_limit',
         'has_limit',
         'status'
