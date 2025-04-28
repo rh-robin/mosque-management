@@ -23,9 +23,9 @@ class AuthController extends Controller
         $credentials = $request->only('email', 'password');
 
         // Attempt login
-        if (!$token = auth('api')->attempt($credentials)) {
+        /*if (!$token = auth('api')->attempt($credentials)) {
             return $this->sendError('Invalid credentials', [], 401);
-        }
+        }*/
 
         // Retrieve authenticated user
         $user = auth('api')->user();
@@ -41,7 +41,6 @@ class AuthController extends Controller
             'id'            => $user->id,
             'email'         => $user->email,
             'role'          => $user->role,
-            'selected_pet'  => $user->selected_pet,
         ];
 
         // Send response with token
