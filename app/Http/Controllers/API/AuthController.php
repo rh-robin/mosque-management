@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Traits\ResponseTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
@@ -14,10 +15,14 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         // Validate request
-        $request->validate([
+        $validator = Validator::make($request->all(),[
             'email' => 'required|email',
             'password' => 'required|string|min:8',
         ]);
+
+        if ($validator->fails()) {
+            return $this->sendError('Validation failed', $validator->errors()->toArray(), 422);
+        }
 
         // Get credentials
         $credentials = $request->only('email', 'password');
