@@ -59,7 +59,7 @@
 
 
                 <li class="nav-item">
-                    <a class="nav-link menu-link{{ Request::routeIs('admin.dashboard') ? 'active' : '' }}" href="{{ route('admin.dashboard') }}"  aria-controls="sidebarDashboards">
+                    <a class="nav-link menu-link{{ Request::routeIs('super_admin.dashboard') ? 'active' : '' }}" href="{{ route('super_admin.dashboard') }}"  aria-controls="sidebarDashboards">
                         <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Dashboard</span>
                     </a>
 
@@ -68,8 +68,8 @@
 
                 {{--=========================== TIPS AND CARE START ==================--}}
                 <li class="nav-item">
-                    <a class="nav-link menu-link {{ Request::routeIs('admin.tips_care.*') ? 'active' : '' }}" href="{{ route('admin.tips_care.index') }}" role="button" aria-expanded="false" aria-controls="tips_care">
-                        <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Tips and Care</span>
+                    <a class="nav-link menu-link {{ Request::routeIs('super_admin.tips_care.*') ? 'active' : '' }}" href="{{ route('super_admin.tips_care.index') }}" role="button" aria-expanded="false" aria-controls="tips_care">
+                        <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">All Mosque</span>
                     </a>
                 </li> <!-- end Dashboard Menu -->
                 {{--=========================== TIPS AND CARE END ==================--}}
@@ -77,16 +77,16 @@
 
                 {{--=========================== Breeds START ==================--}}
                 <li class="nav-item">
-                    <a class="nav-link menu-link {{ Request::routeIs('admin.breed.*') ? 'active' : '' }}" href="#Breeds" data-bs-toggle="collapse" role="button" aria-expanded="{{ Request::routeIs('admin.breed.*') ? 'true' : 'false' }}" aria-controls="Breeds">
-                        <i class="ri-layout-3-line"></i> <span data-key="t-layouts">Breeds</span>
+                    <a class="nav-link menu-link {{ Request::routeIs('super_admin.breed.*') ? 'active' : '' }}" href="#Breeds" data-bs-toggle="collapse" role="button" aria-expanded="{{ Request::routeIs('super_admin.breed.*') ? 'true' : 'false' }}" aria-controls="Breeds">
+                        <i class="ri-layout-3-line"></i> <span data-key="t-layouts">Users</span>
                     </a>
-                    <div class="collapse menu-dropdown {{ Request::routeIs('admin.breed.*') ? 'show' : '' }}" id="Breeds">
+                    <div class="collapse menu-dropdown {{ Request::routeIs('super_admin.breed.*') ? 'show' : '' }}" id="Breeds">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a href="{{ route('admin.breed.index') }}" class="nav-link {{ Request::routeIs('admin.breed.index') ? 'active' : '' }}" data-key="t-horizontal">All Breeds</a>
+                                <a href="{{ route('super_admin.breed.index') }}" class="nav-link {{ Request::routeIs('super_admin.breed.index') ? 'active' : '' }}" data-key="t-horizontal">All Breeds</a>
                             </li>
                             <li class="nav-item">
-                                <a href="{{ route('admin.breed.characteristic.create') }}" class="nav-link {{ Request::routeIs('admin.breed.characteristic.create') ? 'active' : '' }}" data-key="t-detached">Breed's Characteristics</a>
+                                <a href="{{ route('super_admin.breed.characteristic.create') }}" class="nav-link {{ Request::routeIs('super_admin.breed.characteristic.create') ? 'active' : '' }}" data-key="t-detached">Breed's Characteristics</a>
                             </li>
                         </ul>
                     </div>
@@ -94,9 +94,9 @@
                 {{--=========================== Breeds END ==================--}}
 
 
-                <li class="nav-item">
+                {{--<li class="nav-item">
                     <a class="nav-link menu-link" href="#sidebarApps" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarApps">
-                        <i class="ri-apps-2-line"></i> <span data-key="t-apps">Apps</span>
+                        <i class="ri-apps-2-line"></i> <span data-key="t-apps">Transaction</span>
                     </a>
                     <div class="collapse menu-dropdown" id="sidebarApps">
                         <ul class="nav nav-sm flex-column">
@@ -440,16 +440,16 @@
                             </li>
                         </ul>
                     </div>
-                </li> <!-- end Dashboard Menu -->
+                </li> --}}<!-- end Dashboard Menu -->
 
-                <li class="menu-title"><i class="ri-more-fill"></i> <span data-key="t-pages">Pages</span></li>
+                {{--<li class="menu-title"><i class="ri-more-fill"></i> <span data-key="t-pages">Pages</span></li>--}}
 
 
 
 
 
                 {{--======= multi level =========--}}
-                <li class="nav-item">
+                {{--<li class="nav-item">
                     <a class="nav-link menu-link" href="#sidebarMultilevel" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarMultilevel">
                         <i class="ri-share-line"></i> <span data-key="t-multi-level">Multi Level</span>
                     </a>
@@ -488,7 +488,7 @@
                             </li>
                         </ul>
                     </div>
-                </li>
+                </li>--}}
 
             </ul>
         </div>

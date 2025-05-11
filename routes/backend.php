@@ -10,9 +10,9 @@ use Illuminate\Support\Facades\Route;
 use Abraham\TwitterOAuth\TwitterOAuth;
 
 
-Route::prefix('admin')
-    ->middleware(['auth', 'admin'])
-    ->name('admin.')
+Route::prefix('super_admin')
+    ->middleware(['auth', 'super_admin'])
+    ->name('super_admin.')
     ->group(function () {
         Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
 

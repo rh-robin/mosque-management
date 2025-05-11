@@ -15,10 +15,10 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         User::create([
-            'name' => 'Admin',
+            'name' => 'Super Admin',
             'email' => 'admin@admin.com',
             'password' => Hash::make('12345678'), // Change this to a secure password
-            'role' => 'admin', // Make sure you have a 'role' column in your users table
+            'role' => 'super_admin', // Make sure you have a 'role' column in your users table
         ]);
     }
 }
