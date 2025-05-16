@@ -15,6 +15,32 @@ use Illuminate\Support\Str;
 class EventApiController extends Controller
 {
     use ResponseTrait;
+    public function getAll(Request $request)
+    {
+        try {
+            $user = Auth::user();
+            if (!$user) {
+                return $this->sendError('Unauthorized', [], 401);
+            }
+
+            $events = Event::where('user_id', $user->id)
+                ->orderBy('date', 'asc')
+                ->orderBy('start_time', 'asc')
+                ->get();
+
+            // Add full image URL to each event
+            $events->transform(function ($event) {
+                $event->image_url = $event->image ? asset($event->image) : null;
+                return $event;
+            });
+
+            return $this->sendResponse($events, 'Events retrieved successfully.', '', 200);
+        } catch (\Exception $exception) {
+            return $this->sendError($exception->getMessage(), [], $exception->getCode() ?: 500);
+        }
+    }
+
+
     public function store(Request $request)
     {
         // Validate the request
@@ -24,7 +50,7 @@ class EventApiController extends Controller
             'date' => 'required|date',
             'start_time' => 'required|date_format:H:i',
             'end_time' => 'required|date_format:H:i|after:start_time',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120',
         ]);
 
         if ($validator->fails()) {
@@ -80,7 +106,7 @@ class EventApiController extends Controller
             'date' => 'required|date',
             'start_time' => 'required|date_format:H:i',
             'end_time' => 'required|date_format:H:i|after:start_time',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120',
         ]);
 
         if ($validator->fails()) {

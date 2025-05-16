@@ -52,6 +52,7 @@ Route::middleware(['auth:api', 'admin'])
     Route::prefix('post')
         ->controller(PostApiController::class)
         ->group(function () {
+        Route::get('/get-all', 'getAll');
         Route::post('/store', 'store');
         Route::post('/update', 'update');
         Route::post('/destroy', 'destroy');
@@ -61,6 +62,7 @@ Route::middleware(['auth:api', 'admin'])
     Route::prefix('event')
         ->controller(EventApiController::class)
         ->group(function () {
+            Route::get('/get-all', 'getAll');
             Route::post('/store', 'store');
             Route::post('/update', 'update');
             Route::post('/destroy', 'destroy');
@@ -71,6 +73,7 @@ Route::middleware(['auth:api', 'admin'])
         Route::prefix('advertisement')
             ->controller(AdvertisementApiController::class)
             ->group(function () {
+                Route::get('/get-all', 'getAll');
                 Route::post('/store', 'store');
                 Route::post('/update', 'update');
                 Route::post('/destroy', 'destroy');
@@ -81,6 +84,7 @@ Route::middleware(['auth:api', 'admin'])
         Route::prefix('donation')
             ->controller(DonationApiController::class)
             ->group(function () {
+                Route::get('/get-all', 'getAll');
                 Route::post('/store', 'store');
                 Route::post('/update', 'update');
                 Route::post('/destroy', 'destroy');

@@ -16,13 +16,36 @@ use Illuminate\Support\Str;
 class PostApiController extends Controller
 {
     use ResponseTrait;
+    public function getAll()
+    {
+        try {
+            $user = Auth::user();
+            if (!$user) {
+                return $this->sendError('Unauthorized', [], 401);
+            }
+
+            $posts = Post::where('user_id', $user->id)
+                ->latest()
+                ->get()
+                ->map(function ($post) {
+                    $post->image_url = $post->image ? asset($post->image) : null;
+                    return $post;
+                });
+
+            return $this->sendResponse($posts, 'Posts fetched successfully.', '', 200);
+        } catch (\Exception $exception) {
+            return $this->sendError($exception->getMessage(), [], 500);
+        }
+    }
+
+
     public function store(Request $request)
     {
         // Validate the request
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Optional image upload validation
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120', // Optional image upload validation
         ]);
 
         if ($validator->fails()) {
@@ -73,7 +96,7 @@ class PostApiController extends Controller
             'post_id' => 'required|integer|exists:posts,id',
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120',
         ]);
 
         if ($validator->fails()) {

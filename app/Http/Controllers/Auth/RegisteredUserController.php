@@ -99,7 +99,7 @@ class RegisteredUserController extends Controller
             'state' => ['required', 'string', 'max:100'],
             'address' => ['required', 'string', 'max:255'],
             'documents' => ['required'],
-            'documents.*' => ['file', 'mimes:pdf,jpg,jpeg,png', 'max:2048'],
+            'documents.*' => ['file', 'mimes:pdf,jpg,jpeg,png', 'max:5120'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 

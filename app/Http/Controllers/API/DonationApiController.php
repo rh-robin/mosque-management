@@ -9,12 +9,38 @@ use App\Traits\ResponseTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
 class DonationApiController extends Controller
 {
     use ResponseTrait;
+
+    public function getAll(Request $request)
+    {
+        try {
+            $user = Auth::user();
+            if (!$user) {
+                return $this->sendError('Unauthorized', [], 401);
+            }
+
+            $donations = Donation::where('user_id', $user->id)
+                ->orderBy('created_at', 'desc')
+                ->get();
+
+            // Add full image URL for each donation
+            $donations->transform(function ($donation) {
+                $donation->image_url = $donation->image ? asset($donation->image) : null;
+                return $donation;
+            });
+
+            return $this->sendResponse($donations, 'Donations retrieved successfully.', '', 200);
+        } catch (\Exception $exception) {
+            return $this->sendError($exception->getMessage(), [], $exception->getCode() ?: 500);
+        }
+    }
+
     public function store(Request $request)
     {
         // Validate the request
@@ -134,5 +160,46 @@ class DonationApiController extends Controller
         }
     }
 
+
+    public function destroy(Request $request)
+    {
+        // Validate the request
+        $validator = Validator::make($request->all(), [
+            'donation_id' => 'required|integer|exists:donations,id',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->sendError('Validation failed', $validator->errors()->toArray(), 422);
+        }
+
+        DB::beginTransaction();
+
+        try {
+            $user = Auth::user();
+            if (!$user) {
+                return $this->sendError('Unauthorized', [], 401);
+            }
+
+            $donation = Donation::where('id', $request->donation_id)->where('user_id', $user->id)->first();
+
+            if (!$donation) {
+                return $this->sendError('Donation not found or unauthorized access.', [], 404);
+            }
+
+            // Delete image if it exists
+            if ($donation->image && file_exists(public_path($donation->image))) {
+                Helper::fileDelete($donation->image);
+            }
+
+            $donation->delete();
+
+            DB::commit();
+
+            return $this->sendResponse([], 'Donation deleted successfully.', '', 200);
+        } catch (\Exception $exception) {
+            DB::rollBack();
+            return $this->sendError($exception->getMessage(), [], $exception->getCode() ?: 500);
+        }
+    }
 
 }

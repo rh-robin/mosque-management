@@ -15,12 +15,36 @@ use Illuminate\Support\Str;
 class AdvertisementApiController extends Controller
 {
     use ResponseTrait;
+    public function getAll(Request $request)
+    {
+        try {
+            $user = Auth::user();
+            if (!$user) {
+                return $this->sendError('Unauthorized', [], 401);
+            }
+
+            $advertisements = Advertisement::where('user_id', $user->id)
+                ->orderBy('created_at', 'desc')
+                ->get();
+
+            // Add full image URL for each advertisement
+            $advertisements->transform(function ($advertise) {
+                $advertise->image_url = $advertise->image ? asset($advertise->image) : null;
+                return $advertise;
+            });
+
+            return $this->sendResponse($advertisements, 'Advertisements retrieved successfully.', '', 200);
+        } catch (\Exception $exception) {
+            return $this->sendError($exception->getMessage(), [], $exception->getCode() ?: 500);
+        }
+    }
+
     public function store(Request $request)
     {
         // Validate the request
         $validator = Validator::make($request->all(), [
             'content' => 'nullable|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120',
         ]);
 
         if ($validator->fails()) {
@@ -69,7 +93,7 @@ class AdvertisementApiController extends Controller
         $validator = Validator::make($request->all(), [
             'advertisement_id' => 'required|integer|exists:advertisements,id',
             'content' => 'nullable|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:10048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120',
         ]);
 
 
