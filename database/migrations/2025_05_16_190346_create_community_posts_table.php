@@ -11,16 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('donations', function (Blueprint $table) {
+        Schema::create('community_posts', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->string('cause');
-            $table->text('description')->nullable();
-            $table->string('image')->nullable();
-            $table->enum('has_limit', ['yes', 'no']);
-            $table->float('raised_amount')->nullable();
-            $table->float('amount_limit')->nullable();
-            $table->boolean('status')->default(true);
+            $table->text('post');
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
@@ -32,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('donations');
+        Schema::dropIfExists('community_posts');
     }
 };

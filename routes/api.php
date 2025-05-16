@@ -3,6 +3,7 @@
 use App\Http\Controllers\API\AdvertisementApiController;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\BreedsApiController;
+use App\Http\Controllers\API\CommunityPostApiController;
 use App\Http\Controllers\API\DonationApiController;
 use App\Http\Controllers\API\EventApiController;
 use App\Http\Controllers\API\FoodApiController;
@@ -29,6 +30,16 @@ Route::post('login', [AuthController::class, 'login']);
 Route::middleware('auth:api')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/me', [AuthController::class, 'logout']);
+
+    //====== Community Post API routes
+    Route::prefix('community-post')
+        ->controller(CommunityPostApiController::class)
+        ->group(function () {
+            Route::get('/get-all', 'getAll');
+            Route::post('/store', 'store');
+            Route::post('/update', 'update');
+            Route::post('/destroy', 'destroy');
+        });
 });
 
 
@@ -83,6 +94,17 @@ Route::middleware(['auth:api', 'admin'])
         //====== Advertisement API routes
         Route::prefix('donation')
             ->controller(DonationApiController::class)
+            ->group(function () {
+                Route::get('/get-all', 'getAll');
+                Route::post('/store', 'store');
+                Route::post('/update', 'update');
+                Route::post('/destroy', 'destroy');
+            });
+
+
+        //====== Community Post API routes
+        Route::prefix('community-post')
+            ->controller(CommunityPostApiController::class)
             ->group(function () {
                 Route::get('/get-all', 'getAll');
                 Route::post('/store', 'store');
