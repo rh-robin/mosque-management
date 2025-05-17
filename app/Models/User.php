@@ -92,6 +92,16 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(Donation::class);
     }
 
+    public function communityPosts()
+    {
+        return $this->hasMany(CommunityPost::class);
+    }
+
+    public function reacts()
+    {
+        return $this->hasMany(React::class);
+    }
+
     // Method to handle subscription update
     /*public function updateStripeSubscription($invoice)
     {

@@ -9,6 +9,7 @@ use App\Http\Controllers\API\EventApiController;
 use App\Http\Controllers\API\FoodApiController;
 use App\Http\Controllers\API\PetApiController;
 use App\Http\Controllers\API\PostApiController;
+use App\Http\Controllers\API\ReactApiController;
 use App\Http\Controllers\API\SocialLoginController;
 use App\Http\Controllers\API\SubscriptionController;
 use App\Http\Controllers\API\TipsCareApiController;
@@ -34,6 +35,16 @@ Route::middleware('auth:api')->group(function () {
     //====== Community Post API routes
     Route::prefix('community-post')
         ->controller(CommunityPostApiController::class)
+        ->group(function () {
+            Route::get('/get-all', 'getAll');
+            Route::post('/store', 'store');
+            Route::post('/update', 'update');
+            Route::post('/destroy', 'destroy');
+        });
+
+    //====== React on Community Post API routes
+    Route::prefix('react')
+        ->controller(ReactApiController::class)
         ->group(function () {
             Route::get('/get-all', 'getAll');
             Route::post('/store', 'store');
