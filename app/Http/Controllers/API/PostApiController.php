@@ -4,6 +4,8 @@ namespace App\Http\Controllers\API;
 
 use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
+use App\Models\Advertisement;
+use App\Models\Event;
 use App\Models\Post;
 use App\Traits\ResponseTrait;
 use File;
@@ -16,7 +18,73 @@ use Illuminate\Support\Str;
 class PostApiController extends Controller
 {
     use ResponseTrait;
-    public function getAll()
+    public function getAll(Request $request)
+    {
+        try {
+            $user = Auth::user();
+            if (!$user) {
+                return $this->sendError('Unauthorized', [], 401);
+            }
+
+            $posts = Post::where('user_id', $user->id)
+                ->latest()
+                ->get()
+                ->map(function ($post) {
+                    return [
+                        'id' => $post->id,
+                        'title' => $post->title,
+                        'description' => $post->description,
+                        'image_url' => $post->image ? asset($post->image) : null,
+                        'created_at' => $post->created_at,
+                        'type' => 'post',
+                    ];
+                });
+
+            $events = Event::where('user_id', $user->id)
+                ->orderBy('date', 'asc')
+                ->orderBy('start_time', 'asc')
+                ->get()
+                ->map(function ($event) {
+                    return [
+                        'id' => $event->id,
+                        'title' => $event->title,
+                        'description' => $event->description,
+                        'date' => $event->date,
+                        'start_time' => $event->start_time,
+                        'image_url' => $event->image ? asset($event->image) : null,
+                        'created_at' => $event->created_at,
+                        'type' => 'event',
+                    ];
+                });
+
+            $advertisements = Advertisement::where('user_id', $user->id)
+                ->orderBy('created_at', 'desc')
+                ->get()
+                ->map(function ($advertise) {
+                    return [
+                        'id' => $advertise->id,
+                        'title' => $advertise->title,
+                        'description' => $advertise->description,
+                        'image_url' => $advertise->image ? asset($advertise->image) : null,
+                        'created_at' => $advertise->created_at,
+                        'type' => 'advertisement',
+                    ];
+                });
+
+            // Merge all collections into one
+            $allItems = $posts->merge($events)->merge($advertisements);
+
+            // Optional: Sort by created_at descending
+            $allItems = $allItems->sortByDesc('created_at')->values();
+
+            return $this->sendResponse($allItems, 'Data retrieved successfully.', '', 200);
+        } catch (\Exception $exception) {
+            return $this->sendError($exception->getMessage(), [], $exception->getCode() ?: 500);
+        }
+    }
+
+
+    /*public function getAll()
     {
         try {
             $user = Auth::user();
@@ -36,7 +104,7 @@ class PostApiController extends Controller
         } catch (\Exception $exception) {
             return $this->sendError($exception->getMessage(), [], 500);
         }
-    }
+    }*/
 
 
     public function store(Request $request)
