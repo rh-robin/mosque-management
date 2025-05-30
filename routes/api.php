@@ -51,6 +51,8 @@ Route::middleware('auth:api')->group(function () {
             Route::post('/update', 'update');
             Route::post('/destroy', 'destroy');
         });
+
+
 });
 
 

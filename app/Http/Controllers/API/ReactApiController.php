@@ -50,6 +50,7 @@ class ReactApiController extends Controller
                     'community_post_id' => $request->community_post_id,
                     'type' => 'like',
                 ]);
+                $message = 'Reaction like added successfully';
             }
 
             return $this->sendResponse([], $message, '', 200);

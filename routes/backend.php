@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Route;
 use Abraham\TwitterOAuth\TwitterOAuth;
 
 
-Route::prefix('super_admin')
+Route::prefix('super-admin')
     ->middleware(['auth', 'super_admin'])
     ->name('super_admin.')
     ->group(function () {

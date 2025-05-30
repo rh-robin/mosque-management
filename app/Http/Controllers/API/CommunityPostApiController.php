@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\CommunityPost;
 use App\Traits\ResponseTrait;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -21,15 +22,34 @@ class CommunityPostApiController extends Controller
                 return $this->sendError('Unauthorized', [], 401);
             }
 
-            $posts = CommunityPost::with('user:id,name')
+            $posts = CommunityPost::with([
+                'user:id,name',
+                'reacts'
+            ])
                 ->orderBy('created_at', 'desc')
-                ->get();
+                ->get()
+                ->map(function ($post) use ($user) {
+                    $likeCount = $post->reacts->where('type', 'like')->count();
+                    $userReact = $post->reacts->where('user_id', $user->id)->first();
+
+                    return [
+                        'id' => $post->id,
+                        'user_id' => $post->user_id,
+                        'post' => $post->post,
+                        'created_at' => Carbon::parse($post->created_at)->diffForHumans(),
+                        'updated_at' => Carbon::parse($post->updated_at)->diffForHumans(),
+                        'user' => $post->user,
+                        'like_count' => $likeCount,
+                        'this_user_react' => $userReact ? $userReact->type : null,
+                    ];
+                });
 
             return $this->sendResponse($posts, 'Community posts fetched successfully.');
         } catch (\Exception $exception) {
             return $this->sendError($exception->getMessage(), [], 500);
         }
     }
+
 
 
     public function store(Request $request)
