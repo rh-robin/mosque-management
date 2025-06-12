@@ -3,9 +3,11 @@
 use App\Http\Controllers\API\AdvertisementApiController;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\BreedsApiController;
+use App\Http\Controllers\API\CommentApiController;
 use App\Http\Controllers\API\CommunityPostApiController;
 use App\Http\Controllers\API\DonationApiController;
 use App\Http\Controllers\API\EventApiController;
+use App\Http\Controllers\API\FaqApiController;
 use App\Http\Controllers\API\FoodApiController;
 use App\Http\Controllers\API\PetApiController;
 use App\Http\Controllers\API\PostApiController;
@@ -45,6 +47,16 @@ Route::middleware('auth:api')->group(function () {
     //====== React on Community Post API routes
     Route::prefix('react')
         ->controller(ReactApiController::class)
+        ->group(function () {
+            Route::get('/get-all', 'getAll');
+            Route::post('/store', 'store');
+            Route::post('/update', 'update');
+            Route::post('/destroy', 'destroy');
+        });
+
+    //====== React on Community Post API routes
+    Route::prefix('comment')
+        ->controller(CommentApiController::class)
         ->group(function () {
             Route::get('/get-all', 'getAll');
             Route::post('/store', 'store');
@@ -115,9 +127,9 @@ Route::middleware(['auth:api', 'admin'])
             });
 
 
-        //====== Community Post API routes
-        Route::prefix('community-post')
-            ->controller(CommunityPostApiController::class)
+        //====== FAQ API routes
+        Route::prefix('faq')
+            ->controller(FaqApiController::class)
             ->group(function () {
                 Route::get('/get-all', 'getAll');
                 Route::post('/store', 'store');

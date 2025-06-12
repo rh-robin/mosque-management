@@ -23,4 +23,9 @@ class CommunityPost extends Model
     {
         return $this->hasMany(React::class);
     }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
 }

@@ -6,6 +6,7 @@ use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
 use App\Models\Advertisement;
 use App\Models\Event;
+use App\Models\Faq;
 use App\Models\Post;
 use App\Traits\ResponseTrait;
 use File;
@@ -71,10 +72,23 @@ class PostApiController extends Controller
                     ];
                 });
 
-            // Merge all collections into one
-            $allItems = $posts->merge($events)->merge($advertisements);
+            $faqs = Faq::where('user_id', $user->id)
+                ->latest()
+                ->get()
+                ->map(function ($faq) {
+                    return [
+                        'id' => $faq->id,
+                        'title' => $faq->question,
+                        'description' => $faq->answer,
+                        'created_at' => $faq->created_at,
+                        'type' => 'faq',
+                    ];
+                });
 
-            // Optional: Sort by created_at descending
+            // Merge all collections into one
+            $allItems = $posts->merge($events)->merge($advertisements)->merge($faqs);
+
+            // Sort by created_at descending
             $allItems = $allItems->sortByDesc('created_at')->values();
 
             return $this->sendResponse($allItems, 'Data retrieved successfully.', '', 200);
@@ -82,6 +96,7 @@ class PostApiController extends Controller
             return $this->sendError($exception->getMessage(), [], $exception->getCode() ?: 500);
         }
     }
+
 
 
     /*public function getAll()

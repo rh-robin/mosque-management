@@ -102,30 +102,14 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(React::class);
     }
 
-    // Method to handle subscription update
-    /*public function updateStripeSubscription($invoice)
+    public function comments()
     {
-        $plan = Plan::where('stripe_price_id', $invoice->lines->data[0]->price['id'])->first();
+        return $this->hasMany(Comment::class);
+    }
 
-        if (! $plan) {
-            Log::info("Plan not found");
-        }
-        try {
-            $this->subscriptions()->updateOrCreate([
-                'type' => $plan->type,
-                'stripe_id'     => $invoice->customer,
-                'stripe_price'  => $plan->stripe_price_id,
-                'stripe_status' => 'active',
-                'plan_id'       => $plan->id,
-                'quantity'      => $invoice->lines->data[0]->quantity,
-                'ends_at'       => $invoice->period_end,
-            ]);
+    public function faqs()
+    {
+        return $this->hasMany(Faq::class);
+    }
 
-            Log::info("Subscription updated");
-
-        } catch (\Exception $e) {
-            Log::error($e->getMessage());
-        }
-
-    }*/
 }
