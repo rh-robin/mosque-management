@@ -13,7 +13,18 @@ return new class extends Migration
     {
         Schema::create('volunteerings', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('user_id');
+            $table->string('title');
+            $table->date('date');
+            $table->time('start_time');
+            $table->time('end_time');
+            $table->string('location');
+            $table->text('description')->nullable();
+            $table->string('file')->nullable();
+            $table->enum('status', ['active', 'inactive'])->default('active');
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

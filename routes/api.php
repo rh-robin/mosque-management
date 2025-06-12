@@ -15,6 +15,7 @@ use App\Http\Controllers\API\ReactApiController;
 use App\Http\Controllers\API\SocialLoginController;
 use App\Http\Controllers\API\SubscriptionController;
 use App\Http\Controllers\API\TipsCareApiController;
+use App\Http\Controllers\API\VolunteeringApiController;
 use App\Http\Controllers\API\WeightApiController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use Illuminate\Support\Facades\Route;
@@ -130,6 +131,16 @@ Route::middleware(['auth:api', 'admin'])
         //====== FAQ API routes
         Route::prefix('faq')
             ->controller(FaqApiController::class)
+            ->group(function () {
+                Route::get('/get-all', 'getAll');
+                Route::post('/store', 'store');
+                Route::post('/update', 'update');
+                Route::post('/destroy', 'destroy');
+            });
+
+        //====== Volunteering API routes
+        Route::prefix('volunteering')
+            ->controller(VolunteeringApiController::class)
             ->group(function () {
                 Route::get('/get-all', 'getAll');
                 Route::post('/store', 'store');
