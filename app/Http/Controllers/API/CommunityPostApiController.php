@@ -24,12 +24,14 @@ class CommunityPostApiController extends Controller
 
             $posts = CommunityPost::with([
                 'user:id,name',
-                'reacts'
+                'reacts',
+                'comments' // eager load comments to avoid N+1
             ])
                 ->orderBy('created_at', 'desc')
                 ->get()
                 ->map(function ($post) use ($user) {
                     $likeCount = $post->reacts->where('type', 'like')->count();
+                    $commentCount = $post->comments->count();
                     $userReact = $post->reacts->where('user_id', $user->id)->first();
 
                     return [
@@ -40,6 +42,7 @@ class CommunityPostApiController extends Controller
                         'updated_at' => Carbon::parse($post->updated_at)->diffForHumans(),
                         'user' => $post->user,
                         'like_count' => $likeCount,
+                        'comment_count' => $commentCount,
                         'this_user_react' => $userReact ? $userReact->type : null,
                     ];
                 });
@@ -49,6 +52,7 @@ class CommunityPostApiController extends Controller
             return $this->sendError($exception->getMessage(), [], 500);
         }
     }
+
 
 
 

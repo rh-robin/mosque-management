@@ -86,10 +86,11 @@ class PostApiController extends Controller
                 });
 
             // Merge all collections into one
-            $allItems = $posts->merge($events)->merge($advertisements)->merge($faqs);
-
-            // Sort by created_at descending
-            $allItems = $allItems->sortByDesc('created_at')->values();
+            $allItems = collect($posts)
+                ->merge($events)
+                ->merge($advertisements)
+                ->merge($faqs)
+                ->values();
 
             return $this->sendResponse($allItems, 'Data retrieved successfully.', '', 200);
         } catch (\Exception $exception) {

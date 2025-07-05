@@ -35,6 +35,9 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/me', [AuthController::class, 'logout']);
 
+    // Get All POST, EVENTS, ADVERTISEMENTS, FAQ
+    Route::get('post/get-all', [PostApiController::class, 'getAll']);
+
     //====== Community Post API routes
     Route::prefix('community-post')
         ->controller(CommunityPostApiController::class)
@@ -85,25 +88,25 @@ Route::middleware(['auth:api', 'admin'])
     ->prefix('admin')
     ->group(function () {
 
-    //====== Post API routes
-    Route::prefix('post')
-        ->controller(PostApiController::class)
-        ->group(function () {
-        Route::get('/get-all', 'getAll');
-        Route::post('/store', 'store');
-        Route::post('/update', 'update');
-        Route::post('/destroy', 'destroy');
-    });
+        //====== Post API routes
+        Route::prefix('post')
+            ->controller(PostApiController::class)
+            ->group(function () {
+                Route::get('/get-all', 'getAll');
+                Route::post('/store', 'store');
+                Route::post('/update', 'update');
+                Route::post('/destroy', 'destroy');
+            });
 
-    //====== Event API routes
-    Route::prefix('event')
-        ->controller(EventApiController::class)
-        ->group(function () {
-            Route::get('/get-all', 'getAll');
-            Route::post('/store', 'store');
-            Route::post('/update', 'update');
-            Route::post('/destroy', 'destroy');
-        });
+        //====== Event API routes
+        Route::prefix('event')
+            ->controller(EventApiController::class)
+            ->group(function () {
+                Route::get('/get-all', 'getAll');
+                Route::post('/store', 'store');
+                Route::post('/update', 'update');
+                Route::post('/destroy', 'destroy');
+            });
 
 
         //====== Advertisement API routes
@@ -147,7 +150,7 @@ Route::middleware(['auth:api', 'admin'])
                 Route::post('/update', 'update');
                 Route::post('/destroy', 'destroy');
             });
-});
+    });
 
 
 
