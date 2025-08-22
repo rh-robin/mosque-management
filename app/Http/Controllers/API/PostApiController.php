@@ -72,7 +72,7 @@ class PostApiController extends Controller
                     ];
                 });
 
-            $faqs = Faq::where('user_id', $user->id)
+            /*$faqs = Faq::where('user_id', $user->id)
                 ->latest()
                 ->get()
                 ->map(function ($faq) {
@@ -83,13 +83,13 @@ class PostApiController extends Controller
                         'created_at' => $faq->created_at,
                         'type' => 'faq',
                     ];
-                });
+                });*/
 
             // Merge all collections into one
             $allItems = collect($posts)
                 ->merge($events)
                 ->merge($advertisements)
-                ->merge($faqs)
+                //->merge($faqs)
                 ->values();
 
             return $this->sendResponse($allItems, 'Data retrieved successfully.', '', 200);

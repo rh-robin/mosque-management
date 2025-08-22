@@ -9,8 +9,10 @@ use App\Http\Controllers\API\DonationApiController;
 use App\Http\Controllers\API\EventApiController;
 use App\Http\Controllers\API\FaqApiController;
 use App\Http\Controllers\API\FoodApiController;
+use App\Http\Controllers\API\MosqueApiController;
 use App\Http\Controllers\API\PetApiController;
 use App\Http\Controllers\API\PostApiController;
+use App\Http\Controllers\API\ProfileApiController;
 use App\Http\Controllers\API\ReactApiController;
 use App\Http\Controllers\API\SocialLoginController;
 use App\Http\Controllers\API\SubscriptionController;
@@ -31,11 +33,25 @@ Route::post('user/register', [RegisteredUserController::class, 'userStore']);
 Route::post('admin/register', [RegisteredUserController::class, 'adminStore']);
 Route::post('login', [AuthController::class, 'login']);
 
+
+
 Route::middleware('auth:api')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/me', [AuthController::class, 'logout']);
 
-    // Get All POST, EVENTS, ADVERTISEMENTS, FAQ
+    //======== SEARCH MOSQUE========
+    Route::get('mosque/all', [MosqueApiController::class, 'searchMosque']);
+
+    //====== PROFILE API routes
+    Route::prefix('profile')
+        ->controller(ProfileApiController::class)
+        ->group(function () {
+            Route::post('/update', 'updateUserProfile');
+            Route::get('/get', 'getUserProfile');
+            Route::post('/change-password', 'userChangePassword');
+        });
+
+    // Get All POST, EVENTS, ADVERTISEMENTS
     Route::get('post/get-all', [PostApiController::class, 'getAll']);
 
     //====== Community Post API routes
@@ -87,6 +103,15 @@ Route::post('user/register', [RegisteredUserController::class, 'userStore']);
 Route::middleware(['auth:api', 'admin'])
     ->prefix('admin')
     ->group(function () {
+
+        //====== Profile API routes
+        Route::prefix('profile')
+            ->controller(ProfileApiController::class)
+            ->group(function () {
+                Route::post('/update', 'adminProfileUpdate');
+                Route::get('/get', 'getAdminProfile');
+                Route::post('/change-password', 'adminChangePassword');
+            });
 
         //====== Post API routes
         Route::prefix('post')

@@ -117,4 +117,9 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(Volunteering::class);
     }
 
+    public function socialLinks()
+    {
+        return $this->hasMany(SocialLink::class);
+    }
+
 }
